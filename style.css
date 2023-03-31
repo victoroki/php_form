@@ -1,0 +1,41 @@
+*::before,*::after{
+    box-sizing:border-box;
+  }
+  body{
+    text-align:center;
+    font-size:18px;
+    padding:0;
+    margin:0;
+  }
+  input[type="text"],input[type="email"],input[type="password"]{
+    display:block;
+    width:50%;
+    border-radius:10px;
+    border:0;
+    margin:20px auto;
+    padding:1% 2%; 
+    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+    font-size:18px;
+  }
+  input[type="submit"]{
+    display:block;
+    width:20%;
+    border-radius:10px;
+    border:0;
+    margin:0 auto;
+    padding:10px; 
+    background-color:#7cc07c;
+    color:white;
+  }
+  .warn{
+   width:50%;
+   background-color:#e0b1b1;
+   border-radius:9px;
+   padding:5px;
+  }
+  .success{
+   width:50%;
+   background-color:#b1e9b1;
+   border-radius:9px;
+   padding:5px;
+  }
