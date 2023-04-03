@@ -6,22 +6,29 @@ if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true){
     header("location: form.php");
     exit;
 }
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $opt_user = $_POST["otp"];
-    $otp = rand(100000,999999);
+    $otp = rand(100000, 999999);
+    $email = $_SESSION['email'];
 
-    include ("connection.php");
-    $sql = "INSERT INTO `otp` (email, otp) VALUES ('".$_SESSION['email']."', '$otp')";
-    if($conn->query($sql) !==TRUE){
-       echo "failed to send otp";
+    include("connection.php");
+    
+
+    $sql = "INSERT INTO `otp` (email, otp ) VALUES ('$email', '$otp')";
+    if ($conn->query($sql) === true) {
+        $sql = "SELECT * FROM `otp` WHERE email = '$email' AND otp = '$otp_user'";
+
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+          $num = mysqli_num_rows($result);
+            if ($num>0) {
+                echo "email verfied";
+            } else {
+                header("location: welcome.php");
+            }
+        }
     }
-    $sql = "SELECT * FROM `opt` WHERE email = '$_SESSION['email']', and 'otp' = '$otp_user'";
-    $result = mysqli_query($conn, $sql);
-    $num = mysqli_num_rows($result);
-    if (num == 0) {
-        echo "verfied";
-    }else{
-        echo "invalid";
-    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -78,11 +85,13 @@ if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true){
     </style>
 </head>
 <body>
+    <form action="otpVerification.php" method="post">
     <div class="container">
     <h1>Code Verification</h1>
     <p>we have sent a code to you email<br> <?php echo $_SESSION['email']; ?></p>
     <input type="text" name="otp" placeholder="OTP code" id="otp">
-    <input type="submit" value="send otp">
+    <input type="submit" value="verfy otp">
     </div>
+    </form>
 </body>
 </html>
