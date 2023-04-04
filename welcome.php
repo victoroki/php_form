@@ -1,4 +1,22 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true) {
+    header("location: form.php");
+    exit;
+}
+
+$email = $_SESSION['email'];
+include("connection.php");
+
+$sql = "SELECT * FROM users where email='$email'";
+
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo $row['firstname'];
+    }
+}
 
 ?>
 
@@ -18,5 +36,6 @@
 </head>
 <body>
     <h1>Welcome!!</h1>
+    <p style="text-align:center" ><a href="logout.php">logout</a></p>
 </body>
 </html>

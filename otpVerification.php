@@ -1,34 +1,31 @@
 <?php
 
+include("connection.php");
 session_start();
 
 if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true){
     header("location: form.php");
     exit;
 }
+
+$otp = rand(100000, 999999);
+$email = $_SESSION['email'];
+
+$sql = "INSERT INTO `otp` (email, otp ) VALUES ('$email', '$otp')";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $opt_user = $_POST["otp"];
-    $otp = rand(100000, 999999);
-    $email = $_SESSION['email'];
 
-    include("connection.php");
-    
+    $sql = "SELECT email, otp FROM `otp` WHERE email = '$email' AND otp = '$otp_user'";
 
-    $sql = "INSERT INTO `otp` (email, otp ) VALUES ('$email', '$otp')";
-    if ($conn->query($sql) === true) {
-        $sql = "SELECT * FROM `otp` WHERE email = '$email' AND otp = '$otp_user'";
-
-        $result = mysqli_query($conn, $sql);
-        if ($result) {
-          $num = mysqli_num_rows($result);
-            if ($num>0) {
-                echo "email verfied";
-            } else {
-                header("location: welcome.php");
-            }
+    $result = $conn->query($sql);
+    if ($result->num_rows>0) {
+            echo "email verfied";
+        } else {
+            // echo "invalid code";
+            header("location:welcome.php");
         }
     }
-}
 ?>
 
 <!DOCTYPE html>
